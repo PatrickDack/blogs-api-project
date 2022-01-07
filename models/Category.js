@@ -1,5 +1,5 @@
-const Category = (sequelize, DataTypes) => {
-  const category = sequelize.createTable('Category', {
+module.exports = (sequelize, DataTypes) => {
+  const Category = sequelize.define('Category', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: DataTypes.STRING,
   },
@@ -9,7 +9,5 @@ const Category = (sequelize, DataTypes) => {
     uderScored: true,
   });
 
-  return category;
+  return Category;
 };
-
-module.exports = Category;
