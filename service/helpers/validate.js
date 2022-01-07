@@ -3,6 +3,7 @@ const { User } = require('../../models');
 // console.log(sequelize);
 
 const pattern = {
+  CREATED: 201,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
@@ -20,12 +21,19 @@ const pattern = {
   NOT_TOKEN: 'Token not found',
   EXP_IVALID_TOKEN: 'Expired or invalid token',
   VOID_USER: 'User does not exist',
+  VOID_NAME: '"name" is required',
 };
 
 const response = (code, message) => ({
   code,
   message,
 });
+
+const voidName = (name) => {
+  if (!name) {
+    return response(pattern.BAD_REQUEST, pattern.VOID_NAME);
+  }
+};
 
 const nameValid = (name) => {
   if (name.length < 8) {
@@ -75,4 +83,5 @@ module.exports = {
   binateEmail,
   passwordValid,
   response,
+  voidName,
 };
