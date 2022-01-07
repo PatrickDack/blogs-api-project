@@ -7,10 +7,9 @@ const router = express.Router();
 router.post('/', async (req, res, next) => {
   try {
     const obj = req.body;
-    const newUser = await userService.create(obj);
-    console.log(newUser);
+    const token = await userService.create(obj);
 
-    return res.status(201).json(newUser);
+    return res.status(201).json({ token });
   } catch (e) {
     console.log(e.message);
     return next(e);
