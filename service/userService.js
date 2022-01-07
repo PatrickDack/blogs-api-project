@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { response, pattern } = require('./helpers/validate');
 
 const SECRET = '123';
 
@@ -22,7 +23,18 @@ const getAll = async () => {
   return users;
 };
 
+const getById = async (id) => {
+  const user = await User.findByPk(id);
+
+  if (!user) {
+    return response(pattern.NOT_FOUND, pattern.VOID_USER);
+  }
+
+  return user;
+};
+
 module.exports = {
   create,
   getAll,
+  getById,
 };

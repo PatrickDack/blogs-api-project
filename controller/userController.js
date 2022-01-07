@@ -18,6 +18,23 @@ router.post('/', userValidate, async (req, res, next) => {
   }
 });
 
+router.get('/:id', auth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await userService.getById(id);
+
+    if (user.code) {
+      return next(user);
+    }
+
+    res.status(200).json(user);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
 router.get('/', auth, async (req, res, next) => {
   try {
     const users = await userService.getAll();

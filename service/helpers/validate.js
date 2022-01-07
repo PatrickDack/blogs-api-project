@@ -5,6 +5,7 @@ const { User } = require('../../models');
 const pattern = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
+  NOT_FOUND: 404,
   CONFLICT: 409,
   REG_EMAIL: /^[a-z0-9_.-]+@[a-z]+\.[a-z]{2,3}(?:\.[a-z]{2})?$/,
   NAME_LENGTH: '"displayName" length must be at least 8 characters long',
@@ -18,6 +19,7 @@ const pattern = {
   INVALID_FIELD: 'Invalid fields',
   NOT_TOKEN: 'Token not found',
   EXP_IVALID_TOKEN: 'Expired or invalid token',
+  VOID_USER: 'User does not exist',
 };
 
 const response = (code, message) => ({
