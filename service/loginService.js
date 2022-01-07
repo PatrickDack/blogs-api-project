@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { emailValid, passwordValid, pattern, response } = require('./helpers/validate');
+const { pattern, response } = require('./helpers/validate');
+const { User } = require('../models');
 
 const SECRET = '123';
 
@@ -9,12 +10,10 @@ const jwtConfig = {
 };
 
 module.exports = async (email, password) => {
-  if (validEmail(email, password)) return sendError(STATUS.UNAUTHORIZED, STATUS.ALL_FIELDS);
-
-  const user = await checkEmail(email);
+  const user = await User.findOne({ where: { email } });
 
   if (!user || user.password !== password) {
-    return sendError(STATUS.UNAUTHORIZED, STATUS.INCORRECT_USER_OR_PASS);
+    return response(pattern.BAD_REQUEST, pattern.INVALID_FIELD);
   }
 
   const token = jwt.sign({ data: user }, SECRET, jwtConfig);

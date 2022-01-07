@@ -8,10 +8,13 @@ const pattern = {
   REG_EMAIL: /^[a-z0-9_.-]+@[a-z]+\.[a-z]{2,3}(?:\.[a-z]{2})?$/,
   NAME_LENGTH: '"displayName" length must be at least 8 characters long',
   INVALID_EMAIL: '"email" must be a valid email',
+  EMPTY_EMAIL: '"email" is not allowed to be empty',
   VOID_EMAIL: '"email" is required',
   PASS_LENGTH: '"password" length must be 6 characters long',
+  EMPTY_PASS: '"password" is not allowed to be empty',
   VOID_PASS: '"password" is required',
   BINATE: 'User already registered',
+  INVALID_FIELD: 'Invalid fields',
 };
 
 const response = (code, message) => ({
@@ -26,6 +29,10 @@ const nameValid = (name) => {
 };
 
 const emailValid = (email) => {
+  if (typeof email === 'string' && email.length === 0) {
+    return response(pattern.BAD_REQUEST, pattern.EMPTY_EMAIL);
+  }
+
   if (!email) {
     return response(pattern.BAD_REQUEST, pattern.VOID_EMAIL);
   }
@@ -36,6 +43,9 @@ const emailValid = (email) => {
 };
 
 const passwordValid = (password) => {
+  if (typeof password === 'string' && password.length === 0) {
+    return response(pattern.BAD_REQUEST, pattern.EMPTY_PASS);
+  }
   if (!password) {
     return response(pattern.BAD_REQUEST, pattern.VOID_PASS);
   }
