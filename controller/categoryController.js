@@ -21,4 +21,15 @@ router.post('/', categoryValidate, async (req, res, next) => {
   }
 });
 
+router.get('/', async (req, res, next) => {
+  try {
+    const categories = await categoryService.getAll();
+
+    res.status(200).json(categories);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
 module.exports = router;
