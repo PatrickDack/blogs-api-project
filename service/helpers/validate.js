@@ -1,4 +1,4 @@
-const { User } = require('../../models');
+const { User, BlogPost } = require('../../models');
 
 // console.log(sequelize);
 
@@ -22,12 +22,49 @@ const pattern = {
   EXP_IVALID_TOKEN: 'Expired or invalid token',
   VOID_USER: 'User does not exist',
   VOID_NAME: '"name" is required',
+  VOID_TITLE: '"title" is required',
+  VOID_CONTENT: '"content" is required',
+  VOID_CATEGORY_ID: '"categoryIds" is required',
+  NOT_CATEGORY: '"categoryIds" not found',
 };
 
 const response = (code, message) => ({
   code,
   message,
 });
+
+const voidTitle = (title) => {
+  if (!title) {
+    return response(pattern.BAD_REQUEST, pattern.VOID_TITLE);
+  }
+};
+
+const voidContent = (content) => {
+  if (!content) {
+    return response(pattern.BAD_REQUEST, pattern.VOID_CONTENT);
+  }
+};
+
+const voidCategoryIds = (arr) => {
+  if (!arr) {
+    return response(pattern.BAD_REQUEST, pattern.VOID_CATEGORY_ID);
+  }
+};
+
+const categoryVerify = async (ids) => {
+  const categoryExit = await Promise.all(ids.map(async (id) => {
+    const category = await BlogPost.findByPk(id);
+    if (!category) {
+      return false;
+    }
+
+    return true;
+  }));
+
+  if (categoryExit.some((category) => !category)) {
+    return response(pattern.BAD_REQUEST, pattern.NOT_CATEGORY);
+  }
+};
 
 const voidName = (name) => {
   if (!name) {
@@ -70,7 +107,7 @@ const passwordValid = (password) => {
 
 const binateEmail = async (email) => {
   const binate = await User.findOne({ where: { email } });
-  console.log('one');
+
   if (binate) {
     return response(pattern.CONFLICT, pattern.BINATE);
   }
@@ -84,4 +121,8 @@ module.exports = {
   passwordValid,
   response,
   voidName,
+  voidTitle,
+  voidContent,
+  voidCategoryIds,
+  categoryVerify,
 };
