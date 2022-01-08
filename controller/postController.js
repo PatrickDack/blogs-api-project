@@ -17,4 +17,15 @@ router.post('/', postValidate, async (req, res, next) => {
   }
 });
 
+router.get('/', async (req, res, next) => {
+  try {
+    const posts = await postService.getAll();
+
+    res.status(200).json(posts);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
 module.exports = router;
