@@ -35,6 +35,8 @@ router.get('/:id', async (req, res, next) => {
 
     const post = await postService.getById(id);
 
+    if (post.code) return next(post);
+
     res.status(200).json(post);
   } catch (e) {
     console.log(e.message);
