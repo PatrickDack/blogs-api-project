@@ -6,7 +6,7 @@ const pattern = {
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
   CONFLICT: 409,
-  REG_EMAIL: /^[a-z0-9_.-]+@[a-z]+\.[a-z]{2,3}(?:\.[a-z]{2})?$/,
+  REG_EMAIL: /^[a-zA-Z0-9_.-]+@[a-z]+\.[a-z]{2,3}(?:\.[a-z]{2})?$/,
   NAME_LENGTH: '"displayName" length must be at least 8 characters long',
   INVALID_EMAIL: '"email" must be a valid email',
   EMPTY_EMAIL: '"email" is not allowed to be empty',
