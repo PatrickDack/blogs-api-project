@@ -20,7 +20,27 @@ const getAll = async () => {
   return posts;
 };
 
+const getById = async (id) => {
+  const post = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+
+  if (!post) {
+    return ({
+      code: 404,
+      message: 'Post does not exist',
+    });
+  }
+
+  return post;
+};
+
 module.exports = {
   create,
   getAll,
+  getById,
 };

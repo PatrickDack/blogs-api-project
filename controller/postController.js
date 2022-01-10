@@ -28,4 +28,19 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const post = await postService.getById(id);
+
+    if (post.code) return next(post);
+
+    res.status(200).json(post);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
 module.exports = router;
