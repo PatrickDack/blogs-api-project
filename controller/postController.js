@@ -1,6 +1,7 @@
 const express = require('express');
 const postService = require('../service/postService');
 const postValidate = require('../service/helpers/postValidate');
+const putPostValidate = require('../service/helpers/putPostValidate');
 
 const router = express.Router();
 
@@ -33,6 +34,20 @@ router.get('/:id', async (req, res, next) => {
     const { id } = req.params;
 
     const post = await postService.getById(id);
+
+    res.status(200).json(post);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
+router.put('/:id', putPostValidate, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    const post = await postService.update(id, title, content);
 
     if (post.code) return next(post);
 

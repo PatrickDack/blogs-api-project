@@ -1,7 +1,5 @@
 const { User, BlogPost } = require('../../models');
 
-// console.log(sequelize);
-
 const pattern = {
   CREATED: 201,
   BAD_REQUEST: 400,
@@ -26,6 +24,9 @@ const pattern = {
   VOID_CONTENT: '"content" is required',
   VOID_CATEGORY_ID: '"categoryIds" is required',
   NOT_CATEGORY: '"categoryIds" not found',
+  NOT_EDIT_CATEGORY: 'Categories cannot be edited',
+  UNAUTHORIZED_USER: 'Unauthorized user',
+  NO_POST_FOUND: 'No post found',
 };
 
 const response = (code, message) => ({
@@ -63,6 +64,12 @@ const categoryVerify = async (ids) => {
 
   if (categoryExit.some((category) => !category)) {
     return response(pattern.BAD_REQUEST, pattern.NOT_CATEGORY);
+  }
+};
+
+const checkCategory = (category) => {
+  if (category) {
+    return response(pattern.BAD_REQUEST, pattern.NOT_EDIT_CATEGORY);
   }
 };
 
@@ -113,6 +120,21 @@ const binateEmail = async (email) => {
   }
 };
 
+const loggedUserCheck = async (id, loggedUserId) => {
+  const post = await BlogPost.findByPk(id);
+
+  if (!post) {
+    return response(pattern.BAD_REQUEST, pattern.NO_POST_FOUND);
+  }
+
+  const { userId } = post;
+  console.log(userId, loggedUserId);
+
+  if (userId !== loggedUserId) {
+    return response(pattern.UNAUTHORIZED, pattern.UNAUTHORIZED_USER);
+  }
+};
+
 module.exports = {
   pattern,
   nameValid,
@@ -125,4 +147,6 @@ module.exports = {
   voidContent,
   voidCategoryIds,
   categoryVerify,
+  checkCategory,
+  loggedUserCheck,
 };
