@@ -50,4 +50,15 @@ router.get('/', auth, async (req, res, next) => {
   }
 });
 
+router.delete('/me', auth, async (req, res, next) => {
+  try {
+    await userService.destroy(req.user.id);
+
+    res.status(204).end();
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
 module.exports = router;

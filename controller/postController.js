@@ -19,6 +19,19 @@ router.post('/', postValidate, async (req, res, next) => {
   }
 });
 
+router.get('/search', async (req, res, next) => {
+  try {
+    const { q } = req.query;
+
+    const posts = await postService.findByQuery(q);
+
+    res.status(200).json(posts);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
 router.get('/', async (req, res, next) => {
   try {
     const posts = await postService.getAll();
