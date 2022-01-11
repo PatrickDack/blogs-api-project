@@ -2,6 +2,7 @@ const express = require('express');
 const postService = require('../service/postService');
 const postValidate = require('../service/helpers/postValidate');
 const putPostValidate = require('../service/helpers/putPostValidate');
+const deletePostValidate = require('../service/helpers/deletePostValidate');
 
 const router = express.Router();
 
@@ -54,6 +55,19 @@ router.put('/:id', putPostValidate, async (req, res, next) => {
     if (post.code) return next(post);
 
     res.status(200).json(post);
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
+router.delete('/:id', deletePostValidate, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    await postService.destroy(id);
+
+    res.status(204).end();
   } catch (e) {
     console.log(e.message);
     next(e);

@@ -26,7 +26,7 @@ const pattern = {
   NOT_CATEGORY: '"categoryIds" not found',
   NOT_EDIT_CATEGORY: 'Categories cannot be edited',
   UNAUTHORIZED_USER: 'Unauthorized user',
-  NO_POST_FOUND: 'No post found',
+  NOT_EXIST_POST: 'Post does not exist',
 };
 
 const response = (code, message) => ({
@@ -124,11 +124,10 @@ const loggedUserCheck = async (id, loggedUserId) => {
   const post = await BlogPost.findByPk(id);
 
   if (!post) {
-    return response(pattern.BAD_REQUEST, pattern.NO_POST_FOUND);
+    return response(pattern.NOT_FOUND, pattern.NOT_EXIST_POST);
   }
 
   const { userId } = post;
-  console.log(userId, loggedUserId);
 
   if (userId !== loggedUserId) {
     return response(pattern.UNAUTHORIZED, pattern.UNAUTHORIZED_USER);
